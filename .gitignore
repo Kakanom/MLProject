@@ -1,3 +1,10 @@
 data/
-
+Real_Or_Fake.ipynb
+__pycache__/
+bot/__pycache__/
+main.py
+models/
+pipeline.ipynb
+received_AgACAgIAAxkBAAIBB2flr5ysAAESsNE0mXxp6TWmqnSsDwACN_AxG3LvMEsLlOBOotSB2wEAAwIAA3gAAzYE.jpg
+requirements.txt
 bot/.env.dev
