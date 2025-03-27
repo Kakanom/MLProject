@@ -10,7 +10,8 @@ sys.path.append(root_dir)
 from model_train import create_model
 from torchvision import transforms
 from config import *
-from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext  # Импорты из telegram.ext
+from telegram.ext import Application, CommandHandler, MessageHandler, filters, \
+    CallbackContext  # Импорты из telegram.ext
 from telegram import Update, ReplyKeyboardMarkup  # Update и ReplyKeyboardMarkup из telegram
 from PIL import Image
 import logging
@@ -21,6 +22,7 @@ DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)  # Уровень логирования можно изменить на DEBUG для более подробных сообщений
 logger = logging.getLogger(__name__)
+
 
 # Загрузка модели
 def load_model(model_path="models/RealityCheck.pth", device=DEVICE):
@@ -36,6 +38,7 @@ def load_model(model_path="models/RealityCheck.pth", device=DEVICE):
         logger.error(f"Ошибка при загрузке модели: {e}")
         raise
 
+
 # Подготовка трансформаций для изображения
 def get_transforms():
     logger.info("Получение трансформаций для изображения")
@@ -45,6 +48,7 @@ def get_transforms():
     except Exception as e:
         logger.error(f"Ошибка при получении трансформаций: {e}")
         raise
+
 
 def predict_image(image_path, model, transform, class_names=['Fake', 'Real'], device=DEVICE):
     logger.info(f"Предсказание для изображения: {image_path}")
@@ -80,6 +84,7 @@ async def start(update: Update, context: CallbackContext):
         reply_markup=reply_markup
     )
 
+
 # --- Обработчик фото ---
 async def handle_photo(update: Update, context: CallbackContext):
     logger.info("Получено фото от пользователя")
@@ -110,6 +115,7 @@ async def handle_photo(update: Update, context: CallbackContext):
         os.remove(file_path)
         logger.info(f"Временный файл {file_path} удален")
 
+
 # --- Главная функция ---
 def main():
     logger.info("Запуск бота...")
@@ -118,6 +124,7 @@ def main():
     app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
     logger.info("Бот запущен и готов к работе.")
     app.run_polling()
+
 
 if __name__ == "__main__":
     main()

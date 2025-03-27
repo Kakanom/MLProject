@@ -4,7 +4,7 @@ from torchvision import datasets, transforms
 import opendatasets as od
 from torch.utils.data import DataLoader
 from pathlib import Path
-import os  
+import os
 import logging
 
 from torch.utils.data import Subset
@@ -12,9 +12,10 @@ from torch.utils.data import Subset
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger()
 
+
 def download_dataset():
     data_dir = './data'
-    
+
     if os.path.exists(data_dir) and os.listdir(data_dir):
         logger.info(f"Папка {data_dir} уже существует и не пуста. Пропускаем загрузку.")
     else:
@@ -70,16 +71,17 @@ def walk_through_dir(dir_path):
     for dirpath, dirnames, filenames in os.walk(dir_path):
         logger.info(f"There are {len(dirnames)} directories and {len(filenames)} images in '{dirpath}'.")
 
+
 if __name__ == "__main__":
     # Пример использования
     logger.info("Начинаем работу.")
     download_dataset()
-    
+
     train_dir = './data/real-vs-fake/train'
     test_dir = './data/real-vs-fake/test'
-    
+
     logger.info("Получаем DataLoader для тренировочных и тестовых данных.")
     train_dataloader, test_dataloader, class_names = get_data_loaders(train_dir, test_dir)
-    
+
     logger.info(f"Class names: {class_names}")
     walk_through_dir(train_dir)
