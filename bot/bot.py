@@ -3,7 +3,6 @@ import torch
 import torchvision
 import sys
 
-# Добавляем корневую директорию в sys.path
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(root_dir)
 
@@ -11,16 +10,14 @@ from model_train import create_model
 from torchvision import transforms
 from config import *
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, \
-    CallbackContext  # Импорты из telegram.ext
-from telegram import Update, ReplyKeyboardMarkup  # Update и ReplyKeyboardMarkup из telegram
+    CallbackContext
+from telegram import Update, ReplyKeyboardMarkup
 from PIL import Image
 import logging
 
-# Устройство для работы модели
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-# Настройка логирования
-logging.basicConfig(level=logging.INFO)  # Уровень логирования можно изменить на DEBUG для более подробных сообщений
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -28,7 +25,7 @@ logger = logging.getLogger(__name__)
 def load_model(model_path="models/RealityCheck.pth", device=DEVICE):
     logger.info(f"Загрузка модели с пути: {model_path}")
     try:
-        model = create_model(num_classes=2, device=device)  # Исправлено: device=device
+        model = create_model(num_classes=2, device=device)
         model.load_state_dict(torch.load(model_path, map_location=device))
         model.to(device)
         model.eval()
@@ -50,7 +47,9 @@ def get_transforms():
         raise
 
 
-def predict_image(image_path, model, transform, class_names=['Fake', 'Real'], device=DEVICE):
+def predict_image(image_path, model, transform, class_names=None, device=DEVICE):
+    if class_names is None:
+        class_names = ['Fake', 'Real']
     logger.info(f"Предсказание для изображения: {image_path}")
     try:
         img = Image.open(image_path).convert('RGB')

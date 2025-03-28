@@ -30,12 +30,10 @@ def download_dataset():
 
 
 def get_data_loaders(train_dir, test_dir, batch_size=32, num_workers=32, subset_size=0):
-    """Возвращает DataLoader, загружая весь датасет, если subset_size == 0, или его часть, если subset_size > 0."""
-    # Определяем устройство
     device = "cuda" if torch.cuda.is_available() else "cpu"
     logger.info(f"Используется устройство: {device}")
 
-    # Загружаем предобученные веса и трансформации для ResNet50
+    # Загружаем предобученные веса и трансформации ResNet50
     weights = torchvision.models.ResNet50_Weights.DEFAULT
     auto_transforms = weights.transforms()
 
@@ -43,24 +41,19 @@ def get_data_loaders(train_dir, test_dir, batch_size=32, num_workers=32, subset_
     train_data = datasets.ImageFolder(root=train_dir, transform=auto_transforms)
     test_data = datasets.ImageFolder(root=test_dir, transform=auto_transforms)
 
-    # Проверяем значение subset_size
     if subset_size == 0:
-        # Используем весь датасет
         train_subset = train_data
         test_subset = test_data
         logger.info(f"Используется весь тренировочный датасет: {len(train_data)} изображений")
         logger.info(f"Используется весь тестовый датасет: {len(test_data)} изображений")
     else:
-        # Используем подмножество из первых subset_size изображений
         train_subset = Subset(train_data, range(min(len(train_data), subset_size)))
         test_subset = Subset(test_data, range(min(len(test_data), subset_size)))
         logger.info(f"Используется {len(train_subset)} тренировочных изображений и {len(test_subset)} тестовых.")
 
-    # Создаем DataLoader'ы
     train_dataloader = DataLoader(dataset=train_subset, batch_size=batch_size, num_workers=num_workers, shuffle=True)
     test_dataloader = DataLoader(dataset=test_subset, batch_size=batch_size, num_workers=num_workers, shuffle=False)
 
-    # Получаем имена классов
     class_names = train_data.classes
     return train_dataloader, test_dataloader, class_names
 
@@ -73,8 +66,6 @@ def walk_through_dir(dir_path):
 
 
 if __name__ == "__main__":
-    # Пример использования
-    logger.info("Начинаем работу.")
     download_dataset()
 
     train_dir = './data/real-vs-fake/train'
