@@ -22,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 # Загрузка модели
-def load_model(model_path="models/RealityCheck.pth", device=DEVICE):
+def load_model(model_path="models/ResNet50_30epoch.pth", device=DEVICE):
     logger.info(f"Загрузка модели с пути: {model_path}")
     try:
         model = create_model(num_classes=2, device=device)
@@ -36,8 +36,8 @@ def load_model(model_path="models/RealityCheck.pth", device=DEVICE):
         raise
 
 
-# Подготовка трансформаций для изображения
-def get_transforms():
+# Веса
+def get_transforms(weight_path="models/ResNet50.pth"):
     logger.info("Получение трансформаций для изображения")
     try:
         weights = torchvision.models.ResNet50_Weights.DEFAULT
